@@ -65,9 +65,9 @@ def solution_one(horizontal_position, depth):
             depth += int(direction[1])
         elif direction[0] == 'up':
             depth -= int(direction[1])
-        
 
     print(horizontal_position * depth)
+
 
 def solution_two(horizontal_position, depth, aim):
     for i in planned_course:
@@ -81,6 +81,7 @@ def solution_two(horizontal_position, depth, aim):
             aim -= int(direction[1])
 
     print(horizontal_position * depth)
+
 
 horizontal_position = 0
 depth = 0

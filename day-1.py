@@ -48,13 +48,13 @@ from puzzles import day1_depth_list as depth_list
 
 # Instead, consider sums of a three-measurement sliding window. Again considering the above example:
 
-# 199  A      
-# 200  A B    
-# 208  A B C  
+# 199  A
+# 200  A B
+# 208  A B C
 # 210    B C D
 # 200  E   C D
 # 207  E F   D
-# 240  E F G  
+# 240  E F G
 # 269    F G H
 # 260      G H
 # 263        H
@@ -76,6 +76,7 @@ from puzzles import day1_depth_list as depth_list
 
 # Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 
+
 def solution_one(depth_list, depth_len, increases):
 
     for n in range(depth_len):
@@ -86,19 +87,19 @@ def solution_one(depth_list, depth_len, increases):
 
     print(increases)
 
+
 def solution_two(depth_list, depth_len, increases):
 
     for n in range(depth_len):
         if n < depth_len-3:
             first_three_set = depth_list[n] + depth_list[n+1] + depth_list[n+2]
             second_three_set = depth_list[n+1] + depth_list[n+2] + depth_list[n+3]
-        
+
             if second_three_set > first_three_set:
                 increases += 1
                 # print(f"{second_three_set} is more than {first_three_set}")
 
     print(increases)
-
 
 
 depth_len = len(depth_list)
