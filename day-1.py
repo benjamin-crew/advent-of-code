@@ -74,6 +74,30 @@
 
 # Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 
+def solution_one(depth_list, depth_len, increases):
+
+    for n in range(depth_len):
+        if n > 0:
+            if depth_list[n] > depth_list[n-1]:
+                increases += 1
+                # print(f"{depth_list[n]} is more than {depth_list[n-1]}")
+
+    print(increases)
+
+def solution_two(depth_list, depth_len, increases):
+
+    for n in range(depth_len):
+        if n < depth_len-3:
+            first_three_set = depth_list[n] + depth_list[n+1] + depth_list[n+2]
+            second_three_set = depth_list[n+1] + depth_list[n+2] + depth_list[n+3]
+        
+            if second_three_set > first_three_set:
+                increases += 1
+                # print(f"{second_three_set} is more than {first_three_set}")
+
+    print(increases)
+
+
 depth_list = [
     196,
     197,
@@ -2079,27 +2103,6 @@ depth_list = [
 depth_len = len(depth_list)
 increases = 0
 
-# Solution One
-# for n in range(depth_len):
-#     if n > 0:
-#         if depth_list[n] > depth_list[n-1]:
-#             increases += 1
-#             print(f"{depth_list[n]} is more than {depth_list[n-1]}")
 
-# print(increases)
-
-# Solution Two
-depth_len = len(depth_list)
-increases = 0
-
-for n in range(depth_len):
-    if n < depth_len-3:
-        first_three_set = depth_list[n] + depth_list[n+1] + depth_list[n+2]
-        second_three_set = depth_list[n+1] + depth_list[n+2] + depth_list[n+3]
-    
-        if second_three_set > first_three_set:
-            print(f"{second_three_set} is more than {first_three_set}")
-            increases += 1
-            
-
-print(increases)
+solution_one(depth_list, depth_len, increases)
+solution_two(depth_list, depth_len, increases)
