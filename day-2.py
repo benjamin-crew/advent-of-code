@@ -55,35 +55,36 @@ from puzzles import day2_planned_course as planned_course
 
 # Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
-# Solution One
-# horizontal_position = 0
-# depth = 0
+def solution_one(horizontal_position, depth):
 
-# for i in planned_course:
-#     direction = i.split()
-#     if direction[0] == 'forward':
-#         horizontal_position += int(direction[1])
-#     elif direction[0] == 'down':
-#         depth += int(direction[1])
-#     elif direction[0] == 'up':
-#         depth -= int(direction[1])
-    
+    for i in planned_course:
+        direction = i.split()
+        if direction[0] == 'forward':
+            horizontal_position += int(direction[1])
+        elif direction[0] == 'down':
+            depth += int(direction[1])
+        elif direction[0] == 'up':
+            depth -= int(direction[1])
+        
 
-# print(horizontal_position * depth)
+    print(horizontal_position * depth)
 
-# Solution Two
+def solution_two(horizontal_position, depth, aim):
+    for i in planned_course:
+        direction = i.split()
+        if direction[0] == 'forward':
+            horizontal_position += int(direction[1])
+            depth += aim * int(direction[1])
+        elif direction[0] == 'down':
+            aim += int(direction[1])
+        elif direction[0] == 'up':
+            aim -= int(direction[1])
+
+    print(horizontal_position * depth)
+
 horizontal_position = 0
 depth = 0
 aim = 0
 
-for i in planned_course:
-    direction = i.split()
-    if direction[0] == 'forward':
-        horizontal_position += int(direction[1])
-        depth += aim * int(direction[1])
-    elif direction[0] == 'down':
-        aim += int(direction[1])
-    elif direction[0] == 'up':
-        aim -= int(direction[1])
-
-print(horizontal_position * depth)
+solution_one(horizontal_position, depth)
+solution_two(horizontal_position, depth, aim)
