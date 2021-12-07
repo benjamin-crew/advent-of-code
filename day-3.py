@@ -62,45 +62,17 @@ from puzzles import day3_diagnostic_report as diagnostic_report
 
 # Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
 
-# Solution One
-def find_life_support(list_of_binaries):
-    
-    oxygen_list = []
+def binary_to_decimal(binary):
+    decimal = 0
+    position = 0
+    for i in reversed(binary):
+        decimal += i * (2 ** position)
+        position += 1
+    return(decimal)
 
-    # List to hold amount of 1's from each char position.
-    ones_list = []
-    for i in range(len(list_of_binaries[0])):
-        ones_list.append(0)
-    
-    
-    # Get a total of 1's so we can compare later
-    for string in list_of_binaries:
-        for i in range(len(list_of_binaries[0])):
-            if string[i] == "1":
-                ones_list[i] += 1
-    
-    print(ones_list)
 
-    index = 0
-    threshold = int((len(list_of_binaries)/2))
-    for position in ones_list:
-        print(position)
-        
-        if position >= threshold:
-            for string in list_of_binaries:
-                if string[index] == "1":
-                    oxygen_list.append(string)
-        else:
-            for string in list_of_binaries:
-                if string[index] == "0":
-                    oxygen_list.append(string)
-        index += 1
-        list_of_binaries = oxygen_list
-        print(oxygen_list)
-
-def find_power_consumption(list_of_binaries):
-
-    binary_items = len(list_of_binaries)
+def solution_one(list_of_binaries):
+    """Get power consumption"""
     gamma_list = []
     gamma_rate = []
     epsilon_rate = []
@@ -127,20 +99,61 @@ def find_power_consumption(list_of_binaries):
     gamma_decimal = binary_to_decimal(gamma_rate)
     epsilon_decimal = binary_to_decimal(epsilon_rate)
 
-    return(gamma_decimal * epsilon_decimal)
+    print(f"Power Consumption: {gamma_decimal * epsilon_decimal}")
 
+
+def solution_two(list_of_binaries):
+    """Get life support rating"""
+    oxygen_list = list_of_binaries
+
+    # Figure out whether 1 or 0 is more common in each position.
+    # List to hold amount of 1's from each char position.
+    ones_list = []
+    for i in range(len(oxygen_list[0])):
+        ones_list.append(0)
+
+    # Get a total of 1's so we can compare later
+    for string in oxygen_list:
+        for i in range(len(oxygen_list[0])):
+            if string[i] == "1":
+                ones_list[i] += 1
+
+    # Get oxygen
+    index = 0
+    threshold = int((len(oxygen_list)/2))
+    for position in ones_list:
+        
+        if position >= threshold:
+            for string in oxygen_list:
+                if string[index] == "1":
+                    oxygen_list.remove(string)
+                    
+        else:
+            for string in oxygen_list:
+                if string[index] == "0":
+                    oxygen_list.remove(string)
+        index += 1
+        print(oxygen_list)
     
-def binary_to_decimal(binary):
-    decimal = 0
-    position = 0
-    for i in reversed(binary):
-        decimal += i * (2 ** position)
-        position += 1
-    return(decimal)
+    # # Get co2
+    # index = 0
+    # threshold = int((len(list_of_binaries)/2))
+    # for position in ones_list:
+        
+    #     if position <= threshold:
+    #         for string in list_of_binaries:
+    #             if string[index] == "0":
+    #                 co2_list.append(string)
+                    
+    #     else:
+    #         for string in list_of_binaries:
+    #             if string[index] == "1":
+    #                 co2_list.append(string)
+    #     index += 1
+    #     list_of_binaries = co2_list
+    #     print(co2_list)
 
 
-# power_consumption = find_power_consumption(diagnostic_report)
-# print(power_consumption)
 
-
-find_life_support(diagnostic_report)
+# solution_one(diagnostic_report)
+solution_two(diagnostic_report)
