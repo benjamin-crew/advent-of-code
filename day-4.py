@@ -60,16 +60,53 @@ filename = 'day-4-boards.txt'
 with open(filename) as boards_txt:
     boards = [[row.split() for row in board.split('\n')] for board in boards_txt.read().strip().split('\n\n')]
 
-for board in boards:
-    for row in board:
-        print(row)
-    print('\n')
-
 drawn_numbers = []
-for number in draw:
-    drawn_numbers.append(number)
+winner = False
 
-    for board in boards:
-        # Check rows
-        for row in board:
-            pass
+while winner is False:
+    if len(draw) > 0:
+        drawn_numbers.append(str(draw.pop(0)))
+
+        if len(drawn_numbers) > 4:
+            
+            for board in boards:
+                
+                # Check columns
+                i = 0
+                j = 0
+                line = 0
+
+                while j < 5:
+                    if board[i][j] in drawn_numbers:
+                        i += 1
+                    else:
+                        i = 0
+                        j += 1
+                    if i == 5:
+                        print("you win (column)")
+                        print(board[0][j])
+                        print(board[1][j])
+                        print(board[2][j])
+                        print(board[3][j])
+                        print(board[4][j])
+                        winner = True
+                        break
+
+                # # Check rows
+                # for row in board:
+                #     line = 0
+                #     for number in drawn_numbers:
+                #         if number in row:
+                #             print(number)
+                #             print(row)
+                #             line += 1
+                #         if line == 5:
+                #             print("you win (row)")
+                #             winner = True
+                #             break
+            
+    else:
+        print("run out of numbers")
+        break
+
+
