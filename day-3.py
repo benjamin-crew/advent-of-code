@@ -1,4 +1,5 @@
 from puzzles import day3_diagnostic_report as diagnostic_report
+
 # --- Day 3: Binary Diagnostic ---
 # The submarine has been making some odd creaking noises, so you ask it to produce a diagnostic report just in case.
 
@@ -61,19 +62,7 @@ from puzzles import day3_diagnostic_report as diagnostic_report
 # Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.
 
 # Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
-def common_bit(list_of_binaries):
-    # Figure out whether 1 or 0 is more common in each position.
-    # List to hold amount of 1's from each char position.
-    ones_list = []
-    for i in range(len(list_of_binaries[0])):
-        ones_list.append(0)
 
-    # Get a total of 1's so we can compare later
-    for string in list_of_binaries:
-        for i in range(len(list_of_binaries[0])):
-            if string[i] == "1":
-                ones_list[i] += 1
-    return(ones_list)
 
 def binary_to_decimal(binary):
     decimal = 0
@@ -83,58 +72,79 @@ def binary_to_decimal(binary):
         position += 1
     return(decimal)
 
-def get_oxygen(list_of_binaries, common_bit_list):
+
+def get_oxygen(list_of_binaries):
     oxygen_list = list_of_binaries.copy()
 
     # Get oxygen
     index = 0
-    threshold = int((len(oxygen_list)/2))
-    for position in common_bit_list:
-        
-        # If 1 is more common, check each string for '1' in index position and remove
+    loop_range = len(oxygen_list[0])
+
+    while index < loop_range:
         if len(oxygen_list) > 1:
-            if position >= threshold:
+
+            # Find out what's most common
+            ones = 0
+            threshold = len(oxygen_list) / 2
+            # Get a total of 1's so we can compare later
+            for string in oxygen_list:
+                if string[index] == "1":
+                    ones += 1
+
+            # If 1 is more common, check each string for '1' in index position and remove
+
+            if ones >= threshold:
                 for string in reversed(oxygen_list):
                     if string[index] == "0":
                         oxygen_list.remove(string)
-                        
+
             else:
                 for string in reversed(oxygen_list):
                     if string[index] == "1":
-                        oxygen_list.remove(string) 
-            
+                        oxygen_list.remove(string)
+            print(oxygen_list)
             index += 1
+        else:
+            break
 
-    oxygen_string = str(oxygen_list)
+    oxygen_string = oxygen_list[0]
     return(oxygen_string)
 
-def get_co2(list_of_binaries, common_bit_list):
+
+def get_co2(list_of_binaries):
     co2_list = list_of_binaries.copy()
-    
+
     # Get co2
     index = 0
-    threshold = int((len(co2_list)/2))
-    for position in common_bit_list:
-        
-        # If 1 is most common, check each string for '1' in index position and remove
+    loop_range = len(co2_list[0])
+
+    while index < loop_range:
         if len(co2_list) > 1:
-            if position >= threshold:
+            # Find out what's most common
+            ones = 0
+            threshold = len(co2_list) / 2
+            # Get a total of 1's so we can compare later
+            for string in co2_list:
+                if string[index] == "1":
+                    ones += 1
+
+            # If 0 is more common, check each string for '0' in index position and remove
+            if ones >= threshold:
                 for string in reversed(co2_list):
                     if string[index] == "1":
                         co2_list.remove(string)
-                        
+
             else:
                 for string in reversed(co2_list):
                     if string[index] == "0":
                         co2_list.remove(string)
-            
-            print(f"Index: {index}, Position: {position}")
             print(co2_list)
-
             index += 1
-
-    co2_string = str(co2_list)
+        else:
+            break
+    co2_string = co2_list[0]
     return(co2_string)
+
 
 def solution_one(list_of_binaries):
     """Get power consumption"""
@@ -170,17 +180,20 @@ def solution_one(list_of_binaries):
 def solution_two(list_of_binaries):
     """Get life support rating"""
 
-    # Get common bit
-    common_bit_list = common_bit(list_of_binaries)
+    # Get ratings and convert them to lists
+    oxygen_generator_rating = list(get_oxygen(list_of_binaries))
+    co2_scrubber_rating = list(get_co2(list_of_binaries))
 
-    
-    oxygen_generator_rating = get_oxygen(list_of_binaries, common_bit_list)
-    co2_scrubber_rating = get_co2(list_of_binaries, common_bit_list)
-    
+    # Convert the strings to ints so it can be passed to binary_to_decimal
+    oxygen_generator_rating_list = [int(i) for i in oxygen_generator_rating]
+    co2_scrubber_rating_list = [int(i) for i in co2_scrubber_rating]
 
-    print(oxygen_generator_rating)
-    print(co2_scrubber_rating)
+    oxygen_decimal = binary_to_decimal(oxygen_generator_rating_list)
+    co2_decimal = binary_to_decimal(co2_scrubber_rating_list)
+
+    life_support_rating = oxygen_decimal * co2_decimal
+    print(life_support_rating)
 
 
-# solution_one(diagnostic_report)
+solution_one(diagnostic_report)
 solution_two(diagnostic_report)
