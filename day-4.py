@@ -57,7 +57,19 @@ from puzzles import day4_draw as draw
 
 filename = 'day-4-boards.txt'
 
-with open(filename) as boards:
-    data = boards.read()
+with open(filename) as boards_txt:
+    boards = [[row.split() for row in board.split('\n')] for board in boards_txt.read().strip().split('\n\n')]
 
-print(type(data.split('\n\n')))
+for board in boards:
+    for row in board:
+        print(row)
+    print('\n')
+
+drawn_numbers = []
+for number in draw:
+    drawn_numbers.append(number)
+
+    for board in boards:
+        # Check rows
+        for row in board:
+            pass
