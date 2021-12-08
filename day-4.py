@@ -55,58 +55,167 @@ from puzzles import day4_draw as draw
 
 # To guarantee victory against the giant squid, figure out which board will win first. What will your final score be if you choose that board?
 
+# --- Part Two ---
+# On the other hand, it might be wise to try a different strategy: let the giant squid win.
+
+# You aren't sure how many bingo boards a giant squid could play at once, so rather than waste time counting its arms, the safe thing to do is to figure out which board will win last and choose that one. That way, no matter which boards it picks, it will win for sure.
+
+# In the above example, the second board is the last to win, which happens after 13 is eventually called and its middle column is completely marked. If you were to keep playing until this point, the second board would have a sum of unmarked numbers equal to 148 for a final score of 148 * 13 = 1924.
+
+# Figure out which board will win last. Once it wins, what would its final score be?
+
+def check_winner(board, drawn_numbers, last_drawn):
+    board_score = 0
+    for row in board:
+        for number in row:
+            if number not in drawn_numbers:
+                board_score += (int(number))
+
+    print(f"Answer = {board_score * int(last_drawn)}")
+
+def solution_two(filename):
+    # Open the file and then use list comprehension to make a list of list of lists. Boards > Board > Row
+    with open(filename) as boards_txt:
+        boards = [[row.split() for row in board.split('\n')] for board in boards_txt.read().strip().split('\n\n')]
+
+    winning_boards = []
+    drawn_numbers = []
+
+    while len(winning_boards) < 100:
+
+        # Draw from draw, remove and append it to drawn_numbers
+        if len(draw) > 0:
+            drawn_numbers.append(str(draw.pop(0)))
+
+            # If more than 4, you can start looking for winners
+            if len(drawn_numbers) > 4:
+                
+                for board in boards:
+
+                    # Check columns
+                    i = 0
+                    j = 0
+                    line = 0
+
+                    while j < 5:
+                        if board[i][j] in drawn_numbers:
+                            i += 1
+                        else:
+                            i = 0
+                            j += 1
+                        if i == 5:
+                            print(f"Winning Column: {board[0][j]}, {board[1][j]}, {board[2][j]}, {board[3][j]}, {board[4][j]} ")
+                            if board not in winning_boards:
+                                winning_boards.append(board)
+                            j = 6
+
+                    # Check rows
+                    for row in board:
+                        line = 0
+                        for number in drawn_numbers:
+                            if number in row:
+                                line += 1
+                            if line == 5:
+                                print(f"Winning Row: {row}")
+                                if board not in winning_boards:
+                                  winning_boards.append(board)
+                                  break
+                                else:
+                                    break
+        print(f"winning boards: {len(winning_boards)}")
+
+        
+    if len(winning_boards) == 100:
+
+        board = winning_boards[-1]
+
+        # Check columns
+        i = 0
+        j = 0
+        line = 0
+
+        while j < 5:
+            if board[i][j] in drawn_numbers:
+                i += 1
+            else:
+                i = 0
+                j += 1
+            if i == 5:
+                print(f"Losing Column: {board[0][j]}, {board[1][j]}, {board[2][j]}, {board[3][j]}, {board[4][j]} ")
+                last_drawn = drawn_numbers[-1]
+                check_winner(board, drawn_numbers, last_drawn)
+                return
+
+        # Check rows
+        for row in board:
+            line = 0
+            for number in drawn_numbers:
+                if number in row:
+                    line += 1
+                if line == 5:
+                    print(f"Losing Row: {row}")
+                    last_drawn = drawn_numbers[-1]
+                    check_winner(board, drawn_numbers, last_drawn)
+                    return
+
+def solution_one(filename):
+
+    # Open the file and then use list comprehension to make a list of list of lists. Boards > Board > Row
+    with open(filename) as boards_txt:
+        boards = [[row.split() for row in board.split('\n')] for board in boards_txt.read().strip().split('\n\n')]
+
+    drawn_numbers = []
+    winner = False
+
+    while winner is False:
+        if len(draw) > 0:
+            # Draw from draw, remove and append it to drawn_numbers
+            drawn_numbers.append(str(draw.pop(0)))
+
+            if len(drawn_numbers) > 4:
+                
+                for board in boards:
+                    
+                    # Check columns
+                    i = 0
+                    j = 0
+                    line = 0
+
+                    while j < 5:
+                        if board[i][j] in drawn_numbers:
+                            i += 1
+                        else:
+                            i = 0
+                            j += 1
+                        if i == 5:
+                            print(f"Winning Column: {board[0][j]}, {board[1][j]}, {board[2][j]}, {board[3][j]}, {board[4][j]} ")
+                            last_drawn = drawn_numbers[-1]
+                            check_winner(board, drawn_numbers, last_drawn)
+
+                            winner = True
+                            return
+
+                    # Check rows
+                    for row in board:
+                        line = 0
+                        for number in drawn_numbers:
+                            if number in row:
+                                line += 1
+                            if line == 5:
+                                print(f"Winning Row: {row}")
+                                last_drawn = drawn_numbers[-1]
+                                check_winner(board, drawn_numbers, last_drawn)
+                                
+                                winner = True
+                                return
+                
+        else:
+            print("run out of numbers")
+            return
+
+
 filename = 'day-4-boards.txt'
 
-with open(filename) as boards_txt:
-    boards = [[row.split() for row in board.split('\n')] for board in boards_txt.read().strip().split('\n\n')]
-
-drawn_numbers = []
-winner = False
-
-while winner is False:
-    if len(draw) > 0:
-        drawn_numbers.append(str(draw.pop(0)))
-
-        if len(drawn_numbers) > 4:
-            
-            for board in boards:
-                
-                # Check columns
-                i = 0
-                j = 0
-                line = 0
-
-                while j < 5:
-                    if board[i][j] in drawn_numbers:
-                        i += 1
-                    else:
-                        i = 0
-                        j += 1
-                    if i == 5:
-                        print("you win (column)")
-                        print(board[0][j])
-                        print(board[1][j])
-                        print(board[2][j])
-                        print(board[3][j])
-                        print(board[4][j])
-                        winner = True
-                        break
-
-                # # Check rows
-                # for row in board:
-                #     line = 0
-                #     for number in drawn_numbers:
-                #         if number in row:
-                #             print(number)
-                #             print(row)
-                #             line += 1
-                #         if line == 5:
-                #             print("you win (row)")
-                #             winner = True
-                #             break
-            
-    else:
-        print("run out of numbers")
-        break
-
-
+# solution_one(filename)
+solution_two(filename)
+print("returned")
