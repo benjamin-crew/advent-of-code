@@ -111,17 +111,35 @@ def map_points(coords_list, grid):
             x_distance = abs(x1-x2)
             y_distance = abs(y1-y2)
 
-            # Think this one works
+            
             if x_distance == y_distance:
                 if y1 < y2:
+                    # Down-right diag
                     if x1 < x2:
                         for num in range(y1, y_distance+1):
                             print(num)
                             grid[y1][num] += 1
                             y1 += 1
 
-                if y1 > y2:
-                    pass
+                    # Down-left diag
+                    if x1 > x2:
+                        for num in range(y_distance, y1-1, -1):
+                            print(num)
+                            grid[y1][num] += 1
+                            y1 += 1
+                elif y1 > y2:
+                    # Up-right diag
+                    if x1 < x2:
+                        for num in range(x1, y_distance+1):
+                            print(num)
+                            grid[y1][num] += 1
+                            y1 -= 1
+                    # Up-left diag
+                    if x1 > x2:
+                        for num in range(y_distance, y2-1, -1):
+                            print(num)
+                            grid[y1][num] += 1
+                            y1 -= 1
 
                 
             else:
