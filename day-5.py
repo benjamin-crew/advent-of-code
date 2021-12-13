@@ -1,70 +1,64 @@
 def map_points(coords_list, grid):
     for line in range(len(coords_list)):
         
-        y1 = int(coords_list[line][0][0])
-        y2 = int(coords_list[line][1][0])
-        x1 = int(coords_list[line][0][1])
-        x2 = int(coords_list[line][1][1])
+        x1 = int(coords_list[line][0][0])
+        y1 = int(coords_list[line][0][1])
 
-        print(f"Num: {line}, {y1}, {x1} -> {y2}, {x2}")
+        x2 = int(coords_list[line][1][0])
+        y2 = int(coords_list[line][1][1])
 
         # Map horizontals
         if y1 == y2:
 
+            #print(f"horizontals : ( {p1x}, {p1y} ) -> ( {p2x}, {p2y} )")
+
             if x1 < x2:
-                for num in range(x1, x2+1):
-                    grid[num][y1] += 1
+                for x in range(x1, x2+1):
+                    grid[x][y1] += 1
 
             elif x1 > x2:
-                for num in range(x2, x1+1):
-                    grid[num][y1] += 1
+                for x in range(x2, x1+1):
+                    grid[x][y1] += 1
             
-            # Map singles
-            else:
-                grid[x1][y1] += 1
-         
         # Map verticals
         elif x1 == x2:
 
+            #print(f"verticals : ( {p1x}, {p1y} ) -> ( {p2x}, {p2y} )")
+
             if y1 < y2:
-                for num in range(y1, y2+1):
-                    grid[x1][num] += 1
+                for y in range(y1, y2+1):
+                    grid[x1][y] += 1
 
             elif y1 > y2:
-                for num in range(y2, y1+1):
-                    grid[x1][num] += 1
-            
-
+                for y in range(y2, y1+1):
+                    grid[x1][y] += 1
         
         # Map diagonals
         else:
-            y_distance = abs(y1-y2)
-            x_distance = abs(x1-x2)
 
-            if x_distance == y_distance:
-                if y1 < y2:
-                    # Down-right diag
-                    if x1 < x2:
-                        for num in range(x1, x2+1):
-                            grid[y1][num] += 1
-                            y1 += 1
+            #print(f"diagonal : ( {p1x}, {p1y} ) -> ( {p2x}, {p2y} )")
 
-                    # Down-left diag
-                    elif x1 > x2:
-                        for num in range(y2, y1-1, -1):
-                            grid[x2][num] += 1
-                            x2 += 1
-                elif y1 > y2:
-                    # Up-right diag
-                    if x1 < x2:
-                        for num in range(x1, x2+1):
-                            grid[y1][num] += 1
-                            y1 -= 1
-                    # Up-left diag
-                    elif x1 > x2:
-                        for num in range(x1+1, x2, -1):
-                            grid[num-1][y1] += 1
-                            y1 -= 1
+            if y1 < y2:
+                # Down-right diag
+                if x1 < x2:
+                    for x,y in zip(range(x1, x2+1),range(y1, y2+1)):
+                        grid[x][y] += 1
+
+                # Down-left diag
+                elif x1 > x2:
+                    for x,y in zip(reversed(range(x2, x1+1)),range(y1, y2+1)):
+                        grid[x][y] += 1
+
+            elif y2 < y1:
+                # Up-right diag
+                if x1 < x2:
+                    for x,y in zip(range(x1, x2+1),reversed(range(y2, y1+1))):
+                        grid[x][y] += 1
+
+                # Up-right diag
+                elif x1 > x2:
+                    for x,y in zip(reversed(range(x2, x1+1)),reversed(range(y2, y1+1))):
+                        grid[x][y] += 1
 
 
 def create_grid(y, x):
