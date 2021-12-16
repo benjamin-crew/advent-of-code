@@ -50,40 +50,58 @@ from puzzles import day6_fish as fishes
 
 # Find a way to simulate lanternfish. How many lanternfish would there be after 80 days?
 
-days = 80
-first_cycle = []
+# --- Part Two ---
+# Suppose the lanternfish live forever and have unlimited food and space. Would they take over the entire ocean?
 
-# Populate the first_cycle list with 1's
-for i in enumerate(fishes):
-    first_cycle.append(1)
+# After 256 days in the example above, there would be a total of 26984457539 lanternfish!
 
+# How many lanternfish would there be after 256 days?
+
+from puzzles import day6_fish as fishes
+
+days = 256
+
+old_fish = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
+
+new_fish = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
+
+# Populate old fishes
+for num in fishes:
+    old_fish[num] += 1
+
+# Start processing
 for day in range(days):
 
-    # Index variable for accessing fishes and cycle lists
-    index = 0
+    for index in range(0, (int(len(new_fish)))):
+        if index == 0:
+            # Number of fish to create
+            create_fish = old_fish[index] + new_fish[index]
 
-    create_fish = 0
+            # Remove old and new 0 fish. We will add these back in at 6 later
+            old_fish[index] = 0
+            new_fish[index] = 0
+        elif index == 7:
+            print("ran 7")
+            old_fish[6] += create_fish
 
-    for fish in fishes:
+        # Minus one day from fish, aslong as index isn't 0
+        if index > 0:
+            if old_fish[index] > 0:
+                store_fish = old_fish[index]
+                old_fish[index - 1] += store_fish
+                old_fish[index] = 0
 
-        if fish == 0:
-            if first_cycle[index] == 0:
-                create_fish += 1
-                fishes[index] = 6
-            else:
-                create_fish += 1
-                fishes[index] = 6
-                first_cycle[index] = 0
-        else:
-            fishes[index] -= 1
+            if new_fish[index] > 0:
+                store_fish = new_fish[index]
+                new_fish[index - 1] += store_fish
+                new_fish[index] = 0
 
-        index += 1
+    # Create fish
+    new_fish[8] += create_fish
 
-    # Create new fish
-    for i in range(0, create_fish):
-        fishes.append(8)
-        first_cycle.append(1)
-    print(f"Day {day}")
-    # print(f"After {day} days: {fishes}")
+total = 0
+for index in range(0, (int(len(new_fish)))):
+    total += old_fish[index]
+    total += new_fish[index]
 
-print(f"Total fish = {len(fishes)}")
+print(f"Total Fish: {total}")
